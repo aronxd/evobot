@@ -9,12 +9,12 @@ module.exports = {
   name: "play",
   cooldown: 3,
   aliases: ["p"],
-  description: "Plays audio from YouTube or Soundcloud",
+  description: "Escucha musica desde youtube",
   async execute(message, args) {
     const { channel } = message.member.voice;
 
     const serverQueue = message.client.queue.get(message.guild.id);
-    if (!channel) return message.reply("You need to join a voice channel first!").catch(console.error);
+    if (!channel) return message.reply("Necesitas unirte a un canal de voz!").catch(console.error);
     if (serverQueue && channel !== message.guild.me.voice.channel)
       return message.reply(`You must be in the same channel as ${message.client.user}`).catch(console.error);
 
@@ -25,9 +25,9 @@ module.exports = {
 
     const permissions = channel.permissionsFor(message.client.user);
     if (!permissions.has("CONNECT"))
-      return message.reply("Cannot connect to voice channel, missing permissions");
+      return message.reply("No se puede conectar al canal de voz, faltan permisos");
     if (!permissions.has("SPEAK"))
-      return message.reply("I cannot speak in this voice channel, make sure I have the proper permissions!");
+      return message.reply("No puedo hablar en este canal de voz, asegúrese de que tenga los permisos adecuados!");
 
     const search = args.join(" ");
     const videoPattern = /^(https?:\/\/)?(www\.)?(m\.)?(youtube\.com|youtu\.?be)\/.+$/gi;
@@ -92,14 +92,14 @@ module.exports = {
         };
       } catch (error) {
         console.error(error);
-        return message.reply("No video was found with a matching title").catch(console.error);
+        return message.reply("No encontre un video con ese titulo").catch(console.error);
       }
     }
 
     if (serverQueue) {
       serverQueue.songs.push(song);
       return serverQueue.textChannel
-        .send(`✅ **${song.title}** has been added to the queue by ${message.author}`)
+        .send(`✅ **${song.title}** a sido añadido a la queue por ${message.author}`)
         .catch(console.error);
     }
 
@@ -118,3 +118,4 @@ module.exports = {
     }
   }
 };
+
